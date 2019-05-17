@@ -1,9 +1,10 @@
-package com.karen.drone.user;
+package com.karen.drone.user.models.persistence;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -12,28 +13,36 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class UserDAO {
 
     @Id
     @Column(name = "user_id")
     private UUID userId;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    public User() {}
+    @Column(name = "role")
+    private String role;
 
-    public User(UUID userId, String email, String password, String name) {
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    public UserDAO() {}
+
+    public UserDAO(UUID userId, String email, String password, String name, String role, Date createdAt) {
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.name = name;
+        this.role = role;
+        this.createdAt = createdAt;
     }
 
     public UUID getUserId() {
@@ -66,5 +75,21 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }
