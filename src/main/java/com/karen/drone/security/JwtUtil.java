@@ -1,9 +1,7 @@
 package com.karen.drone.security;
 
-import com.karen.drone.exceptions.JwtAuthenticationException;
 import com.karen.drone.user.models.persistence.UserDAO;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
