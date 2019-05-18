@@ -1,5 +1,6 @@
 package com.karen.drone.security;
 
+import com.karen.drone.user.models.components.UserRole;
 import com.karen.drone.user.models.persistence.UserDAO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,7 +17,7 @@ public class AuthCtx implements Authentication {
     private UUID id;
     private String email;
     private String name;
-    private String role;
+    private UserRole role;
     private Date expiresAt;
 
     public AuthCtx() { }
@@ -45,11 +46,11 @@ public class AuthCtx implements Authentication {
         this.name = name;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
@@ -63,7 +64,7 @@ public class AuthCtx implements Authentication {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(role));
+        return Collections.singletonList(new SimpleGrantedAuthority(role.toString()));
     }
 
     @Override

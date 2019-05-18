@@ -1,12 +1,9 @@
 package com.karen.drone.user.models;
 
-import io.swagger.annotations.ApiModel;
-
 /**
  * @author Daniel Incicau, daniel.incicau@busymachines.com
  * @since 2019-05-17
  */
-@ApiModel(description = "User definition model")
 public class UserDefinition {
 
     private String email;

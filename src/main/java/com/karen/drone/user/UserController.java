@@ -4,8 +4,10 @@ import com.karen.drone.exceptions.AuthenticationException;
 import com.karen.drone.exceptions.InvalidInputException;
 import com.karen.drone.security.JwtUtil;
 import com.karen.drone.security.SpringSecurityConfig;
+import com.karen.drone.user.models.TokenResponse;
 import com.karen.drone.user.models.UserDefinition;
 import com.karen.drone.user.models.UserLogin;
+import com.karen.drone.user.models.components.UserRole;
 import com.karen.drone.user.models.persistence.UserDAO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +52,7 @@ public class UserController {
             String hashedUserPassword = SpringSecurityConfig.encoder().encode(adminPassword);
             user.setPassword(hashedUserPassword);
             user.setName("Administrator");
-            user.setRole(SpringSecurityConfig.ROLE_ADMIN);
+            user.setRole(UserRole.ADMIN);
             user.setCreatedAt(new Date());
 
             userRepository.save(user);
@@ -65,7 +67,7 @@ public class UserController {
 
     @ApiOperation(value = "Login")
     @PostMapping(path="/user/login")
-    public ResponseEntity<String> login(@RequestBody UserLogin login) {
+    public ResponseEntity<TokenResponse> login(@RequestBody UserLogin login) {
         UserDAO user = userRepository.findByEmail(login.email).orElseThrow(
                 () -> new AuthenticationException("Login attempt failed")
         );
@@ -75,27 +77,27 @@ public class UserController {
         }
 
         String token = jwtUtil.generateToken(user);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return new ResponseEntity<>(new TokenResponse(token), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Register")
     @PostMapping(path="/user")
-    public ResponseEntity<String> register(@RequestBody UserDefinition def) {
+    public ResponseEntity<TokenResponse> register(@RequestBody UserDefinition def) {
         if(userRepository.findByEmail(def.getEmail()).isPresent()) {
             throw new InvalidInputException("Email already registered");
         }
 
+        UserDAO dao = new UserDAO();
+        dao.setUserId(UUID.randomUUID());
+        dao.setEmail(def.getEmail());
         String hashedPassword = SpringSecurityConfig.encoder().encode(def.getPassword());
-        UserDAO userDao = new UserDAO(UUID.randomUUID(), def.getEmail(), hashedPassword, def.getName(), SpringSecurityConfig.ROLE_USER, new Date());
-        userRepository.save(userDao);
+        dao.setPassword(hashedPassword);
+        dao.setName(def.getName());
+        dao.setRole(UserRole.USER);
+        dao.setCreatedAt(new Date());
+        userRepository.save(dao);
 
-        String token = jwtUtil.generateToken(userDao);
-        return new ResponseEntity<>(token, HttpStatus.CREATED);
-    }
-
-    @ApiOperation(value = "Authenticated test endpoint")
-    @GetMapping(path="/user/authenticated")
-    public ResponseEntity testAuthenticated() {
-        return new ResponseEntity(HttpStatus.OK);
+        String token = jwtUtil.generateToken(dao);
+        return new ResponseEntity<>(new TokenResponse(token), HttpStatus.CREATED);
     }
 }

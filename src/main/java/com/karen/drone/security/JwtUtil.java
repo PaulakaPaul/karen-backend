@@ -1,5 +1,6 @@
 package com.karen.drone.security;
 
+import com.karen.drone.user.models.components.UserRole;
 import com.karen.drone.user.models.persistence.UserDAO;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class JwtUtil {
             ctx.setEmail(body.getSubject());
             ctx.setId(UUID.fromString((String)body.get("userId")));
             ctx.setName((String) body.get("name"));
-            ctx.setRole((String) body.get("role"));
+            ctx.setRole(UserRole.valueOf((String) body.get("role")));
 
             Date expireDate = new Date((long) body.get("expiresAt"));
             ctx.setExpiresAt(expireDate);

@@ -25,9 +25,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(securedEnabled=true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    public static String ROLE_USER = "USER";
-    public static String ROLE_ADMIN = "ADMIN";
-
     @Autowired
     private JwtTokenFilter jwtTokenFilter;
 
@@ -45,7 +42,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**") .permitAll()
-                .antMatchers("/user/authenticated").authenticated()
+                .antMatchers("/user/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/event").permitAll()
+                .antMatchers("/event/**").fullyAuthenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);

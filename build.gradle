@@ -14,7 +14,13 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/io.springfox/springfox-core
+	// https://mvnrepository.com/artifact/org.springframework/spring-messaging
+	compile group: 'org.springframework', name: 'spring-messaging', version: '5.1.7.RELEASE'
+
+	// https://mvnrepository.com/artifact/org.springframework/spring-websocket
+	compile group: 'org.springframework', name: 'spring-websocket', version: '5.1.7.RELEASE'
+
+	// https://mvnrepository.com/artifact/io.springfox/springfox-core
     compile group: 'io.springfox', name: 'springfox-core', version: '2.9.2'
 
     // https://mvnrepository.com/artifact/io.springfox/springfox-swagger2

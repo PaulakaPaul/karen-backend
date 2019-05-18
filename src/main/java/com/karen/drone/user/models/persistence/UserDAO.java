@@ -1,10 +1,11 @@
 package com.karen.drone.user.models.persistence;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.karen.drone.comment.model.persistence.CommentDAO;
+import com.karen.drone.user.models.components.UserRole;
+
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -28,21 +29,27 @@ public class UserDAO {
     @Column(name = "name")
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private String role;
+    private UserRole role;
 
     @Column(name = "created_at")
     private Date createdAt;
 
+    @OneToMany(mappedBy = "postedBy", fetch=FetchType.LAZY, cascade = CascadeType.DETACH)
+    @OrderBy("posted_at desc")
+    private List<CommentDAO> comments;
+
     public UserDAO() {}
 
-    public UserDAO(UUID userId, String email, String password, String name, String role, Date createdAt) {
+    public UserDAO(UUID userId, String email, String password, String name, UserRole role, Date createdAt, List<CommentDAO> comments) {
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.name = name;
         this.role = role;
         this.createdAt = createdAt;
+        this.comments = comments;
     }
 
     public UUID getUserId() {
@@ -77,11 +84,11 @@ public class UserDAO {
         this.name = name;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
@@ -91,5 +98,13 @@ public class UserDAO {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<CommentDAO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDAO> comments) {
+        this.comments = comments;
     }
 }
