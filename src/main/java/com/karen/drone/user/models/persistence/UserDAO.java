@@ -1,6 +1,7 @@
 package com.karen.drone.user.models.persistence;
 
 import com.karen.drone.comment.model.persistence.CommentDAO;
+import com.karen.drone.submission.model.persistence.SubmissionDAO;
 import com.karen.drone.user.models.components.UserRole;
 
 import javax.persistence.*;
@@ -40,9 +41,13 @@ public class UserDAO {
     @OrderBy("posted_at desc")
     private List<CommentDAO> comments;
 
+    @OneToMany(mappedBy = "submittedBy", fetch=FetchType.LAZY, cascade = CascadeType.DETACH)
+    @OrderBy("submitted_at desc")
+    private List<SubmissionDAO> submissions;
+
     public UserDAO() {}
 
-    public UserDAO(UUID userId, String email, String password, String name, UserRole role, Date createdAt, List<CommentDAO> comments) {
+    public UserDAO(UUID userId, String email, String password, String name, UserRole role, Date createdAt, List<CommentDAO> comments, List<SubmissionDAO> submissions) {
         this.userId = userId;
         this.email = email;
         this.password = password;
@@ -50,6 +55,7 @@ public class UserDAO {
         this.role = role;
         this.createdAt = createdAt;
         this.comments = comments;
+        this.submissions = submissions;
     }
 
     public UUID getUserId() {
@@ -106,5 +112,13 @@ public class UserDAO {
 
     public void setComments(List<CommentDAO> comments) {
         this.comments = comments;
+    }
+
+    public List<SubmissionDAO> getSubmissions() {
+        return submissions;
+    }
+
+    public void setSubmissions(List<SubmissionDAO> submissions) {
+        this.submissions = submissions;
     }
 }

@@ -20,15 +20,13 @@ public class ImageCodec {
     }
 
     public static String encodeImage(String imgType, byte[] image) {
-        String encodedImg = Base64.getEncoder().encodeToString(image);
-        return "data:" + imgType + ";base64," + encodedImg;
+        if(image != null) {
+            String encodedImg = Base64.getEncoder().encodeToString(image);
+            return "data:" + imgType + ";base64," + encodedImg;
+        }
+        else return null;
     }
 
-    /**
-     * Extract the MIME type from a base64 string
-     * @param encoded Base64 string
-     * @return MIME type string
-     */
     private static String extractMimeType(final String encoded) {
         final Pattern mime = Pattern.compile("^data:([a-zA-Z0-9]+/[a-zA-Z0-9]+).*,.*");
         final Matcher matcher = mime.matcher(encoded);

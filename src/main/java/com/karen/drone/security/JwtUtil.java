@@ -66,13 +66,13 @@ public class JwtUtil {
 
     String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+        if(bearerToken != null) {
             return bearerToken.substring(7);
         }
         return null;
     }
 
-    boolean validateToken(String token) {
+    boolean validateToken(String token) throws JwtAuthenticationException {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());

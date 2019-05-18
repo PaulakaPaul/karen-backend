@@ -2,7 +2,6 @@ package com.karen.drone.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.karen.drone.exceptions.ErrorResponse;
-import io.jsonwebtoken.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,4 +42,5 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             response.getWriter().write(mapper.writeValueAsString(errorResponse));
         }
     }
+
 }

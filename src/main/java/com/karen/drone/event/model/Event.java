@@ -3,6 +3,8 @@ package com.karen.drone.event.model;
 import com.karen.drone.comment.model.Comment;
 import com.karen.drone.event.model.components.Coords;
 import com.karen.drone.event.model.components.EventStatus;
+import com.karen.drone.submission.model.Submission;
+
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -19,17 +21,19 @@ public class Event {
     private Coords coords;
     private EventStatus status;
     private List<Comment> comments;
+    private List<Submission> submissions;
     private Date reportedAt;
 
     public Event() { }
 
-    public Event(UUID eventId, String droneId, String image, Coords coords, EventStatus status, List<Comment> comments, Date reportedAt) {
+    public Event(UUID eventId, String droneId, String image, Coords coords, EventStatus status, List<Comment> comments, List<Submission> submissions, Date reportedAt) {
         this.eventId = eventId;
         this.droneId = droneId;
         this.image = image;
         this.coords = coords;
         this.status = status;
         this.comments = comments;
+        this.submissions = submissions;
         this.reportedAt = reportedAt;
     }
 
@@ -79,6 +83,14 @@ public class Event {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public List<Submission> getSubmissions() {
+        return submissions;
+    }
+
+    public void setSubmissions(List<Submission> submissions) {
+        this.submissions = submissions;
     }
 
     public Date getReportedAt() {

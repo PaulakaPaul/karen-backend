@@ -2,6 +2,7 @@ package com.karen.drone.event.model.persistence;
 
 import com.karen.drone.comment.model.persistence.CommentDAO;
 import com.karen.drone.event.model.components.EventStatus;
+import com.karen.drone.submission.model.persistence.SubmissionDAO;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -46,10 +47,14 @@ public class EventDAO {
     @OrderBy("posted_at desc")
     private List<CommentDAO> comments;
 
+    @OneToMany(mappedBy = "event", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OrderBy("submitted_at desc")
+    private List<SubmissionDAO> submissions;
+
     public EventDAO() {
     }
 
-    public EventDAO(UUID eventId, String droneId, String imageType, byte[] image, Double longitude, Double latitude, EventStatus status, Date reportedAt, List<CommentDAO> comments) {
+    public EventDAO(UUID eventId, String droneId, String imageType, byte[] image, Double longitude, Double latitude, EventStatus status, Date reportedAt, List<CommentDAO> comments,  List<SubmissionDAO> submissions) {
         this.eventId = eventId;
         this.droneId = droneId;
         this.imageType = imageType;
@@ -59,6 +64,7 @@ public class EventDAO {
         this.status = status;
         this.reportedAt = reportedAt;
         this.comments = comments;
+        this.submissions = submissions;
     }
 
     public UUID getEventId() {
@@ -131,5 +137,13 @@ public class EventDAO {
 
     public void setComments(List<CommentDAO> comments) {
         this.comments = comments;
+    }
+
+    public List<SubmissionDAO> getSubmissions() {
+        return submissions;
+    }
+
+    public void setSubmissions(List<SubmissionDAO> submissions) {
+        this.submissions = submissions;
     }
 }
