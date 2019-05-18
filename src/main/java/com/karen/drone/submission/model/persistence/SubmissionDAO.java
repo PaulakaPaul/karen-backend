@@ -30,6 +30,7 @@ public class SubmissionDAO {
     private byte[] image;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private SubmissionStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -44,11 +44,11 @@ public class EventDAO {
     private Date reportedAt;
 
     @OneToMany(mappedBy = "event", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @OrderBy("posted_at desc")
+    @OrderBy("posted_at asc")
     private List<CommentDAO> comments;
 
     @OneToMany(mappedBy = "event", fetch=FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @OrderBy("submitted_at desc")
+    @OrderBy("submitted_at asc")
     private List<SubmissionDAO> submissions;
 
     public EventDAO() {
