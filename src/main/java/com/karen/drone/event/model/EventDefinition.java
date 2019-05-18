@@ -10,14 +10,12 @@ public class EventDefinition {
 
     private String droneId;
     private String image;
-    private Coords coords;
 
     public EventDefinition() { }
 
-    public EventDefinition(String droneId, String image, Coords coords) {
+    public EventDefinition(String droneId, String image) {
         this.droneId = droneId;
         this.image = image;
-        this.coords = coords;
     }
 
     public String getDroneId() {
@@ -34,14 +32,6 @@ public class EventDefinition {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public Coords getCoords() {
-        return coords;
-    }
-
-    public void setCoords(Coords coords) {
-        this.coords = coords;
     }
 
 }

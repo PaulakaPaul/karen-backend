@@ -5,12 +5,12 @@ import com.karen.drone.comment.model.Comment;
 import com.karen.drone.comment.model.CommentDefinition;
 import com.karen.drone.comment.model.CommentDefinitionResponse;
 import com.karen.drone.event.model.*;
+import com.karen.drone.event.model.components.Coords;
 import com.karen.drone.event.model.components.EventStatus;
 import com.karen.drone.comment.model.persistence.CommentDAO;
 import com.karen.drone.event.model.persistence.EventDAO;
 import com.karen.drone.exceptions.AuthenticationException;
 import com.karen.drone.exceptions.ForbiddenFailure;
-import com.karen.drone.exceptions.InvalidInputException;
 import com.karen.drone.exceptions.NotFoundException;
 import com.karen.drone.security.AuthCtx;
 import com.karen.drone.submission.SubmissionRepository;
@@ -23,12 +23,13 @@ import com.karen.drone.user.UserRepository;
 import com.karen.drone.user.models.UserProfile;
 import com.karen.drone.user.models.components.UserRole;
 import com.karen.drone.user.models.persistence.UserDAO;
+import com.karen.drone.util.GeoUtil;
 import com.karen.drone.util.Image;
 import com.karen.drone.util.ImageCodec;
 import com.karen.drone.util.Transformers;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +43,15 @@ import java.util.*;
  */
 @RestController
 public class EventController {
+
+    @Value("${geo.longitude:0}")
+    private Double centerLongitude;
+
+    @Value("${geo.latitude:0}")
+    private Double centerLatitude;
+
+    @Value("${geo.radius:100}")
+    private Integer radius;
 
     @Autowired
     private EventRepository eventRepository;
@@ -82,8 +92,9 @@ public class EventController {
             System.out.println("EVENT: Image can not be decoded");
         }
 
-        dao.setLongitude(def.getCoords().getLongitude());
-        dao.setLatitude(def.getCoords().getLatitude());
+        Coords point = GeoUtil.getRandomLocationInRadius(new Coords(centerLongitude, centerLatitude), radius);
+        dao.setLongitude(point.getLongitude());
+        dao.setLatitude(point.getLatitude());
         dao.setStatus(EventStatus.OPENED);
         dao.setReportedAt(new Date());
 
