@@ -6,30 +6,30 @@ package com.karen.drone.event.model.components;
  */
 public class Coords {
 
-    private long longitude;
-    private long latitude;
+    private Double longitude;
+    private Double latitude;
 
     public Coords() {
     }
 
-    public Coords(long longitude, long latitude) {
+    public Coords(Double longitude, Double latitude) {
         this.longitude = longitude;
         this.latitude = latitude;
     }
 
-    public long getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(long longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
-    public long getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(long latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 }

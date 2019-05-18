@@ -6,6 +6,5 @@ package com.karen.drone.event.model.components;
  */
 public enum EventStatus {
     OPENED,
-    PENDING_VALIDATION,
     CLOSED
 }

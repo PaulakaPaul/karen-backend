@@ -1,25 +1,27 @@
 package com.karen.drone.comment.model;
 
+import java.util.UUID;
+
 /**
  * @author Daniel Incicau, daniel.incicau@busymachines.com
  * @since 2019-05-18
  */
 public class CommentDefinitionResponse {
 
-    private Integer commentId;
+    private UUID commentId;
 
     public CommentDefinitionResponse() {
     }
 
-    public CommentDefinitionResponse(Integer commentId) {
+    public CommentDefinitionResponse(UUID commentId) {
         this.commentId = commentId;
     }
 
-    public Integer getCommentId() {
+    public UUID getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(Integer commentId) {
+    public void setCommentId(UUID commentId) {
         this.commentId = commentId;
     }
 }

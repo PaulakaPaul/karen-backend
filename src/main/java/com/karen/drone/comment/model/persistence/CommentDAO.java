@@ -5,6 +5,7 @@ import com.karen.drone.user.models.persistence.UserDAO;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author Daniel Incicau, daniel.incicau@busymachines.com
@@ -15,9 +16,8 @@ import java.util.Date;
 public class CommentDAO {
 
     @Id
-    @GeneratedValue
     @Column(name = "comment_id")
-    private Integer commentId;
+    private UUID commentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private EventDAO event;
@@ -40,11 +40,11 @@ public class CommentDAO {
         this.postedAt = postedAt;
     }
 
-    public Integer getCommentId() {
+    public UUID getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(Integer commentId) {
+    public void setCommentId(UUID commentId) {
         this.commentId = commentId;
     }
 

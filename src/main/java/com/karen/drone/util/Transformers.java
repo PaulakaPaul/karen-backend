@@ -34,12 +34,12 @@ public class Transformers {
     }
 
     public static Event eventFromDAO(EventDAO dao, List<Comment> comments) {
-        Coords coords = new Coords(dao.getLongitude(), dao.getLongitude());
+        Coords coords = new Coords(dao.getLongitude(), dao.getLatitude());
         Event event = new Event();
         event.setEventId(dao.getEventId());
         event.setDroneId(dao.getDroneId());
         event.setCoords(coords);
-        event.setImage(Base64.getEncoder().encodeToString(dao.getImage()));
+        event.setImage(ImageCodec.encodeImage(dao.getImageType(), dao.getImage()));
         event.setStatus(dao.getStatus());
         event.setComments(comments);
         event.setReportedAt(dao.getReportedAt());

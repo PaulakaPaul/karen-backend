@@ -3,6 +3,7 @@ package com.karen.drone.comment.model;
 import com.karen.drone.user.models.UserProfile;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author Daniel Incicau, daniel.incicau@busymachines.com
@@ -10,25 +11,25 @@ import java.util.Date;
  */
 public class Comment {
 
-    private Integer commentId;
+    private UUID commentId;
     private String message;
     private UserProfile postedBy;
     private Date postedAt;
 
     public Comment() {}
 
-    public Comment(Integer commentId, String message, UserProfile postedBy, Date postedAt) {
+    public Comment(UUID commentId, String message, UserProfile postedBy, Date postedAt) {
         this.commentId = commentId;
         this.message = message;
         this.postedBy = postedBy;
         this.postedAt = postedAt;
     }
 
-    public Integer getCommentId() {
+    public UUID getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(Integer commentId) {
+    public void setCommentId(UUID commentId) {
         this.commentId = commentId;
     }
 

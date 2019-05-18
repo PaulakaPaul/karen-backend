@@ -16,6 +16,8 @@ import com.karen.drone.user.UserRepository;
 import com.karen.drone.user.models.UserProfile;
 import com.karen.drone.user.models.components.UserRole;
 import com.karen.drone.user.models.persistence.UserDAO;
+import com.karen.drone.util.Image;
+import com.karen.drone.util.ImageCodec;
 import com.karen.drone.util.Transformers;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +61,16 @@ public class EventController {
         EventDAO dao = new EventDAO();
         dao.setEventId(UUID.randomUUID());
         dao.setDroneId(def.getDroneId());
-        dao.setImage(Base64.getDecoder().decode(def.getImage()));
+
+        Image img = ImageCodec.decodeImage(def.getImage());
+        if(img != null) {
+            dao.setImage(img.getBytes());
+            dao.setImageType(img.getType());
+        }
+        else {
+            System.out.println("Image can not be decoded");
+        }
+
         dao.setLongitude(def.getCoords().getLongitude());
         dao.setLatitude(def.getCoords().getLatitude());
         dao.setStatus(EventStatus.OPENED);
@@ -105,6 +116,7 @@ public class EventController {
         );
 
         CommentDAO dao = new CommentDAO();
+        dao.setCommentId(UUID.randomUUID());
         dao.setEvent(eventDao);
         dao.setMessage(def.getMessage());
         dao.setPostedBy(userDao);
@@ -118,18 +130,11 @@ public class EventController {
     }
 
     @ApiOperation(value = "Delete comment")
-    @DeleteMapping("/event/{eventId}/comment/{commentId}")
-    public void deleteCommentFromEvent(@PathVariable UUID eventId, @PathVariable Integer commentId) {
-        EventDAO eventDao = eventRepository.findById(eventId).orElseThrow(
-                () -> new NotFoundException("Event with id '" + eventId + "' was not found")
-        );
+    @DeleteMapping("/comment/{commentId}")
+    public void deleteCommentFromEvent(@PathVariable Integer commentId) {
         CommentDAO commentDAO = commentRepository.findById(commentId).orElseThrow(
                 () -> new NotFoundException("Comment with id '" + commentId + "' was not found")
         );
-
-        if(commentDAO.getEvent().getEventId() != eventDao.getEventId()) {
-            throw new ForbiddenFailure("Comment is not assigned to specified event");
-        }
 
         AuthCtx authCtx = (AuthCtx) SecurityContextHolder.getContext().getAuthentication();
         if(authCtx.getRole() != UserRole.ADMIN && commentDAO.getPostedBy().getUserId() != authCtx.getId()) {

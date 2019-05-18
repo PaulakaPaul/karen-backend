@@ -1,5 +1,6 @@
 package com.karen.drone.user;
 
+import com.karen.drone.comment.model.CommentDefinition;
 import com.karen.drone.exceptions.AuthenticationException;
 import com.karen.drone.exceptions.InvalidInputException;
 import com.karen.drone.security.JwtUtil;
@@ -14,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
@@ -100,4 +98,10 @@ public class UserController {
         String token = jwtUtil.generateToken(dao);
         return new ResponseEntity<>(new TokenResponse(token), HttpStatus.CREATED);
     }
+
+    @GetMapping("/uuid")
+    public UUID getRandomUUID() {
+        return UUID.randomUUID();
+    }
+
 }

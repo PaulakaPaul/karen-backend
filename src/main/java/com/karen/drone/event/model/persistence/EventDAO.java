@@ -23,14 +23,17 @@ public class EventDAO {
     @Column(name = "drone_id")
     private String droneId;
 
+    @Column(name = "image_type")
+    private String imageType;
+
     @Column(name = "image")
     private byte[] image;
 
     @Column(name = "longitude")
-    private long longitude;
+    private Double longitude;
 
     @Column(name = "latitude")
-    private long latitude;
+    private Double latitude;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -46,9 +49,10 @@ public class EventDAO {
     public EventDAO() {
     }
 
-    public EventDAO(UUID eventId, String droneId, byte[] image, long longitude, long latitude, EventStatus status, Date reportedAt, List<CommentDAO> comments) {
+    public EventDAO(UUID eventId, String droneId, String imageType, byte[] image, Double longitude, Double latitude, EventStatus status, Date reportedAt, List<CommentDAO> comments) {
         this.eventId = eventId;
         this.droneId = droneId;
+        this.imageType = imageType;
         this.image = image;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -73,6 +77,14 @@ public class EventDAO {
         this.droneId = droneId;
     }
 
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
+
     public byte[] getImage() {
         return image;
     }
@@ -81,19 +93,19 @@ public class EventDAO {
         this.image = image;
     }
 
-    public long getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(long longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
-    public long getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(long latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
