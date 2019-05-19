@@ -31,8 +31,7 @@ public class GeoUtil {
 
         double foundLatitude = new_x + x0;
         double foundLongitude = y + y0;
-        Coords randomLocation = new Coords(foundLongitude, foundLatitude);
-        return randomLocation;
+        return new Coords(foundLongitude, foundLatitude);
     }
 
 }

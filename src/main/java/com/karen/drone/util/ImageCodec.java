@@ -36,7 +36,7 @@ public class ImageCodec {
     }
 
     private static byte[] extractImage(final String encoded) {
-        final Pattern mime = Pattern.compile("^data:[a-zA-Z0-9]+/[a-zA-Z0-9]+.*,.([a-zA-Z0-9/]+)");
+        final Pattern mime = Pattern.compile("^data:[a-zA-Z0-9]+/[a-zA-Z0-9]+.*,([a-zA-Z0-9/+=]+)");
         final Matcher matcher = mime.matcher(encoded);
         if (!matcher.find())
             return new byte[0];

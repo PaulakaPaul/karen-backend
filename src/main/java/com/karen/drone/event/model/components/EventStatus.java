@@ -5,6 +5,6 @@ package com.karen.drone.event.model.components;
  * @since 2019-05-18
  */
 public enum EventStatus {
-    OPENED,
+    OPEN,
     CLOSED
 }

@@ -14,6 +14,7 @@ import com.karen.drone.exceptions.ForbiddenFailure;
 import com.karen.drone.exceptions.NotFoundException;
 import com.karen.drone.security.AuthCtx;
 import com.karen.drone.submission.SubmissionRepository;
+import com.karen.drone.submission.model.ChangeStatus;
 import com.karen.drone.submission.model.Submission;
 import com.karen.drone.submission.model.SubmissionDefinition;
 import com.karen.drone.submission.model.SubmissionDefinitionResponse;
@@ -95,7 +96,7 @@ public class EventController {
         Coords point = GeoUtil.getRandomLocationInRadius(new Coords(centerLongitude, centerLatitude), radius);
         dao.setLongitude(point.getLongitude());
         dao.setLatitude(point.getLatitude());
-        dao.setStatus(EventStatus.OPENED);
+        dao.setStatus(EventStatus.OPEN);
         dao.setReportedAt(new Date());
 
         eventRepository.save(dao);
@@ -204,32 +205,31 @@ public class EventController {
 
     @ApiOperation(value = "Approve/Decline a submission - Admin Only")
     @PutMapping("/submission/{submissionId}")
-    public void changeSubmissionStatus(@PathVariable UUID submissionId, @RequestParam(name = "status") SubmissionStatus newStatus) {
+    public void changeSubmissionStatus(@PathVariable UUID submissionId, @RequestBody ChangeStatus changeStatus) {
         SubmissionDAO submissionDAO = submissionRepository.findById(submissionId).orElseThrow(
                 () -> new NotFoundException("Submission with id '" + submissionId + "' was not found")
         );
-
         EventDAO eventDao = submissionDAO.getEvent();
-        if(eventDao.getStatus() == EventStatus.CLOSED) {
-            throw new ForbiddenFailure("Not allowed to modify a closed event");
-        }
 
         AuthCtx authCtx = (AuthCtx) SecurityContextHolder.getContext().getAuthentication();
         if(authCtx.getRole() != UserRole.ADMIN) {
             throw new ForbiddenFailure("Only admins are allowed to change submission status");
         }
 
-        if(submissionDAO.getStatus() != SubmissionStatus.PENDING) {
-            throw new ForbiddenFailure("Can only change status of a pending submission");
-        }
-
         // close event
-        if(newStatus == SubmissionStatus.ACCEPTED) {
+        if(changeStatus.getStatus() == SubmissionStatus.ACCEPTED) {
+            if(eventDao.getStatus() == EventStatus.CLOSED) {
+                throw new ForbiddenFailure("There can be only one true ruler of this kingdowm");
+            }
             eventDao.setStatus(EventStatus.CLOSED);
             eventRepository.save(eventDao);
         }
+        else if(changeStatus.getStatus() == SubmissionStatus.DECLINED) {
+            eventDao.setStatus(EventStatus.OPEN);
+            eventRepository.save(eventDao);
+        }
 
-        submissionDAO.setStatus(newStatus);
+        submissionDAO.setStatus(changeStatus.getStatus());
         submissionRepository.save(submissionDAO);
     }
 
